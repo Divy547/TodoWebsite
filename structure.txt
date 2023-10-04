@@ -1,0 +1,25 @@
+#WebPages
+
+    >>HomePage
+        Just tells about the website, handles navigation and ask for the user to signup or login.
+
+    >>CreateTodo 
+        1. Task description with date and time.
+        2. Expected time and date for the task to be finished.
+        2. DeleteTask.
+
+    >>ShowCurrentTodo
+        1. Shows the ongoing task.
+        2. Shows the desired time.
+        3. Notifies for the task.
+
+
+#Model Structure
+    Two Models
+        1. UserDetails:
+            Login and SignUp for user asking form UserName, Password.
+            **Secondary**
+
+        2. Todo:
+            Will ask description of the task, date and time created will be noted, also will ask for the expected time for completion of the task.
+            **Primary**

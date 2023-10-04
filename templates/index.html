@@ -1,0 +1,211 @@
+{% load static tailwind_tags %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Martel:wght@200&family=Mooli&family=Pacifico&family=Poppins:wght@200;300&display=swap"
+        rel="stylesheet">
+    <title>{% block title %}Home{% endblock title %}</title>
+    {% tailwind_css %}
+</head>
+
+<body>
+
+    <section class="navbar flex  ">
+        <div class="content flex w-full m-3">
+
+            <div class="left flex w-4/6 justify-center items-center ">
+                <div class="title w-2/5 h-full   martel flex justify-start">
+                    <h1 class="text-3xl text-black font-bold px-3">Todo<span
+                            class="text-3xl text-orange-600 font-extrabold">.</span></h1>
+                </div>
+                <div
+                    class="list w-3/5 h-full flex   items-center justify-start mooli text-base font-semibold text-black">
+
+                    <li class="list-none mx-2"><a href="/">Home</a></li>
+                    <li class="list-none mx-2"><a href="/createtodo">CreateTodo</a></li>
+                    <li class="list-none mx-2"><a href="/viewTodo">OnGoingTask</a></li>
+                </div>
+            </div>
+            <div class="right  w-2/6 mooli">
+                <div class="buttons flex h-full justify-end items-center">
+                    {% if user.is_authenticated %}
+                    <span class="text-lg font-bold text-slate-950 px-3">Welcome, {{request.user|capfirst}}</span>
+
+                    <button
+                        class="text-white rounded-lg bg-green-600 mx-2 list-none h-full w-[80px] flex items-center justify-center hover:bg-green-700"><a
+                            href="/logout">LogOut</a></button href="/hello">
+
+                    {% else %}
+
+                    <button onclick="openModal_logIn()"
+                        class="text-white rounded-lg bg-green-600 mx-2 list-none h-full w-[80px] flex items-center justify-center hover:bg-green-700">LogIn</button>
+
+                    <button onclick="openModal_signUp()"
+                        class="text-white rounded-lg bg-blue-600 mx-2 list-none h-full w-[80px] flex items-center justify-center hover:bg-blue-700">SignUp</button>
+
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="main w-full h-[50px] flex justify-start items-center">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="bg-green-500 w-[400px] flex justify-between rounded-lg mx-3">
+            <p class="text-xl text-white mx-[20px] py-2">{{message}}</p>
+            <button onclick="window.location.reload(true)"><ion-icon name="close-outline"
+                    class="text-2xl text-black text-right mr-2"></ion-icon></button>
+        </div>
+        {% elif message.tags == 'error' %}
+        <div class=" bg-red-500 w-[400px] flex justify-between rounded-lg mx-3">
+            <p class="text-xl text-white mx-[20px] py-2">{{message}}</p>
+            <button onclick="window.location.reload(true)"><ion-icon name="close-outline"
+                    class="text-2xl text-black text-right mr-2"></ion-icon></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        </div>
+    </section>
+
+    <section class="forms">
+        <div class="signUp fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
+            style="background: rgba(0,0,0,.7)">
+            <div
+                class="border border-teal-500  modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+                <div class="modal-content py-4 text-left px-6">
+                    <!--Title-->
+                    <div class="flex justify-end items-center pb-3 w-full">
+                        <div class="modal-close cursor-pointer z-50">
+                            <ion-icon name="close-outline" class="text-2xl text-blue-900 text-right"></ion-icon>
+                        </div>
+                    </div>
+                    <!--Body-->
+                    <form class="w-full max-w-sm mx-auto bg-white p-8 rounded-md shadow-md" action="/signUp"
+                        method="post">{% csrf_token %}
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
+                            <input
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                type="text" name="name" placeholder="Binod">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+                            <input
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                type="email" name="email" placeholder="binod@example.com">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+                            <input
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                type="password" name="password" placeholder="********">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="confirm_password">Confirm
+                                Password</label>
+                            <input
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                type="password" name="confirm-password" placeholder="********">
+                        </div>
+                        <button
+                            class="w-full bg-indigo-500 text-white text-sm font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300"
+                            type="submit">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- LogIn Page -->
+        <div class="logIn fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
+            style="background: rgba(0,0,0,.7);">
+            <div
+                class="border border-teal-500  modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+                <div class="modal-content py-4 text-left px-6">
+                    <!--Title-->
+                    <div class="flex justify-end items-center pb-3 w-full">
+                        <div class="modal-close cursor-pointer z-50">
+                            <ion-icon name="close-outline" class="text-2xl text-blue-900 text-right"></ion-icon>
+                        </div>
+                    </div>
+                    <!--Body-->
+                    <form class="w-full max-w-sm mx-auto bg-white p-8 rounded-md shadow-md" action="/login"
+                        method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
+                            <input
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                type="text" name="LoginName" placeholder="John Doe">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+                            <input
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                type="password" name="LoginPassword" placeholder="********">
+                        </div>
+
+                        <button
+                            class="w-full bg-indigo-500 text-white text-sm font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300"
+                            type="submit">LogIn</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    {% block Main %}
+    {% if user.is_authenticated %}
+    <section class="text-gray-600 body-font">
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex items-center lg:w-3/5 mx-auto border-b pb-10 mb-10 border-gray-200 sm:flex-row flex-col">
+                <div
+                    class="sm:w-32 sm:h-32 h-20 w-20 sm:mr-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 flex-shrink-0">
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" class="sm:w-16 sm:h-16 w-10 h-10" viewBox="0 0 24 24">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                </div>
+                <div class="flex-grow sm:text-left text-center mt-6 sm:mt-0">
+                    <h2 class="text-gray-900 text-lg title-font font-medium mb-2">Welcome to Todo.</h2>
+                    <p class="leading-relaxed text-base">This website allows you list your all doings, create them, describe them, set the expected time and delete them once done.</p>
+                    <a class="mt-3 text-indigo-500 inline-flex items-center cursor-pointer" href="/createtodo">CreateTodos
+                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% else %}
+    <section class="w-full h-auto">
+        <div class="main flex flex-col mooli bg-slate-400 rounded-md mx-7 my-0 w-1/2">
+            <h1 class="text-3xl p-3">Welcome To Todo</h1>
+            <p class="text-lg text-slate-800 my-2 text-justify p-3">You can Make Todos</p>
+            <p class="text-lg text-slate-800 my-2 p-3">LogIn or SignUp to CreateTodos.</p>
+        </div>
+    </section>
+    {% endif %}
+    {% endblock Main %}
+
+    <script src="/static/index.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>

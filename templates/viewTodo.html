@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+{% block title %}ViewTodo{% endblock title %}
+
+{% block Main %}
+{% if user.is_authenticated %}
+
+<div class="todo mooli flex flex-col text-slate-950 justify-center items-center">
+    {% for todo in todos %}
+    <div class="content flex flex-col m-3 w-[600px] bg-slate-100 rounded-md shadow-lg shadow-gray-300">
+        <div class="matter flex flex-col m-6">
+
+            <h1 class="font-bold text-lg w-1/2">{{forloop.counter}}. Title: {{todo.title}}</h1>
+            <p class="pl-5 text-xs text-slate-800 mb-3">{{todo.crateDt}}</p>
+            <p class="pl-4 my-1 text-base">Todo: {{todo.desc}}</p>
+            <p class="pl-4 my-1 text-base">ExpectedDate: {{todo.expectedDateTime}}</p>
+        </div>
+    </div>
+    
+    {% endfor %}
+</div>
+
+{% else %}
+<section class="w-full h-auto">
+    <div class="main flex flex-col mooli bg-slate-400 rounded-md mx-7 my-0 w-1/2">
+        <h1 class="text-3xl p-3">ViewTodos Here</h1>
+        <p class="text-lg text-slate-800 my-2 text-justify p-3">You can delete the Todos here.</p>
+        <p class="text-lg text-slate-800 my-2 p-3">LogIn or SignUp to CreateTodos.</p>
+    </div>
+</section>
+{% endif %}
+{% endblock Main %}
